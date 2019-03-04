@@ -169,21 +169,7 @@ void PaintWindow(HWND hWnd) {  //Probably needs a clean and tune up.
 
 	BitBlt(hDCMem, 0, 0, cWidth, cHeight, hDC, 0, 0, SRCCOPY);
 
-	int pitch = 4 * cWidth; // 4 bytes per pixel but if not 32 bit, round pitch up to multiple of 4
-	int index;
-	/*for (int x = 0; x < 500; x = x++)
-	{
-		for (int y = 0; y < 200; y++)
-		{
-			index = y * pitch;
-			index += x * 4;
-			lpBitmapBits[index + 0] = 87;  // blue
-			lpBitmapBits[index + 1] = 122; // green
-			lpBitmapBits[index + 2] = 185;  // red 
-		}
-	}*/
 	memcpy(lpBitmapBits, canvas, cWidth*cHeight*4);
-
 
 	BitBlt(hDC, 0, 0, cWidth, cHeight, hDCMem, 0, 0, SRCCOPY);
 
@@ -196,19 +182,13 @@ void PaintWindow(HWND hWnd) {  //Probably needs a clean and tune up.
 }
 
 LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
-	static clock_t timeOfLastFrame = 0;
-	if (clock() >= timeOfLastFrame + CLOCKS_PER_SEC/30) {
-		RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
-		//PaintWindow(hWnd);
-		timeOfLastFrame = clock();
-	}
 
 	switch (msg) {
-
-	case WM_KEYDOWN: // same as pressing the X button:
-	case WM_CLOSE:   DestroyWindow(hWnd); return 0;
-	case WM_DESTROY: end();  PostQuitMessage(0);  return 0;
-	case WM_PAINT:   PaintWindow(hWnd);   return 0;
+	case WM_KEYDOWN:	// same as pressing the X button:
+	case WM_CLOSE:		DestroyWindow(hWnd); return 0;
+	case WM_DESTROY:	end(); exit(0); return 0;
+						//PostQuitMessage(0);  //May not be needed.
+	case WM_PAINT:		PaintWindow(hWnd);   return 0;
 	}
 
 	return DefWindowProc(hWnd, msg, wp, lp);
@@ -235,13 +215,24 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR args, int ncmdsho
 	if (!RegisterClassW(&wc))
 		return -1;
 
-	CreateWindowW(L"myWindowClass", 0, WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+	HWND hWnd = CreateWindowW(L"myWindowClass", 0, WS_OVERLAPPEDWINDOW | WS_VISIBLE,
 		0, 0, cWidth, cHeight, NULL, NULL, NULL, NULL);
 
 	MSG msg = { 0 };
-	while (GetMessage(&msg, NULL, NULL, NULL)) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+	//while (GetMessage(&msg, NULL, NULL, NULL)) {
+	//while (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) {
+	clock_t timeOfLastFrame = 0;
+	while (true) {
+		if (clock() >= timeOfLastFrame + CLOCKS_PER_SEC / 60) {
+			RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
+			UpdateWindow(hWnd);
+			timeOfLastFrame = clock();
+		}
+
+		while (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
 		appLoop();
 	}
 
