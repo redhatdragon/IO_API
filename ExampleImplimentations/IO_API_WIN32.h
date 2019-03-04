@@ -3,7 +3,7 @@
 /*************************************************************************
 				[PUBLIC DOMAIN]
 
-				WIND32 IO API
+				WIN32 IO API
 
 Build:	Build in VS or your favorite compiler as a win32 application.
 You may compile as a console application by using

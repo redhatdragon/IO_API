@@ -10,3 +10,8 @@ out the API's function prototypes.  Or use any IO_API_ implimentation
 built by another.  It's designed to be minimal and only concern itself
 with platform specific functionality so that you can easily layer other
 libraries ontop which don't require IO specific tasks directly.
+
+::Instilation::
+Copy IO_API.h and IO_API.c into your project and either make or use a
+file that impliments the IO_API.h's function prototypes.  See IO_API.h
+for details.
