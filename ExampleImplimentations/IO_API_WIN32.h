@@ -248,6 +248,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR args, int ncmdsho
 	return 0;
 }
 
-/*int main() {
+#ifdef IS_CONSOLE_APPLICATION
+int main() {
 	return WinMain(GetModuleHandle(NULL), NULL, GetCommandLineA(), SW_SHOWNORMAL);
-}*/
+}
+#endif
