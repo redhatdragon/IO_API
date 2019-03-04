@@ -1,5 +1,5 @@
-			# IO_API
-			Version: 0.0.1
+# IO_API
+Version: 0.0.1
 
 Ever wanted to build an application that was not only easily portible,
 but wasn't excessivly bulky with tons of functionality you don't want?
