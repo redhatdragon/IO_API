@@ -15,3 +15,45 @@ libraries ontop which don't require IO specific tasks directly.
 Copy IO_API.h and IO_API.c into your project and either make or use a
 file that impliments the IO_API.h's function prototypes.  See IO_API.h
 for details.
+
+EXAMPLE:
+//In pure main.c
+
+#include "IO_API/IO_API.h"
+#include <time.h>
+#include <stdio.h>
+
+
+
+struct Texture texture;
+clock_t c;
+
+void start() {
+	cWidth = 1024;
+	cHeight = 768;
+	
+	getTexture("test.png", &texture);
+
+	c = clock();
+}
+
+void end() {
+	free(texture.data);
+}
+
+void appLoop() {
+	static int x = 0;
+
+	drawTexture(&texture, 64, 64);
+
+	double duration = (clock() - c) / (double)CLOCKS_PER_SEC;
+
+	char str[100] = { 0 };
+	int ms = duration * CLOCKS_PER_SEC;
+	_itoa(ms, str, 10);
+	printf("ms of time till last frame ");  //May be inaccurate not sure yet.
+	printf(str);
+	printf("\r\n");
+
+	c = clock();
+}
