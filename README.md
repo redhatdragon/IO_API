@@ -17,6 +17,7 @@ file that impliments the IO_API.h's function prototypes.  See IO_API.h
 for details.
 
 EXAMPLE:
+```c
 //In pure main.c
 
 #include "IO_API/IO_API.h"
@@ -57,3 +58,4 @@ void appLoop() {
 
 	c = clock();
 }
+```
