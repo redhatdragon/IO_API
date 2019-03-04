@@ -18,7 +18,7 @@ for details.
 
 EXAMPLE:
 ```c
-//In pure main.c
+//main.c
 
 #include "IO_API/IO_API.h"
 #include <time.h>
