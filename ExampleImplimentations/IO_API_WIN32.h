@@ -184,7 +184,7 @@ void PaintWindow(HWND hWnd) {  //Probably needs a clean and tune up.
 LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	switch (msg) {
-	case WM_KEYDOWN:	// same as pressing the X button:
+	case WM_KEYDOWN:	return 0;  // same as pressing the X button:
 	case WM_CLOSE:		DestroyWindow(hWnd); return 0;
 	case WM_DESTROY:	end(); exit(0); return 0;
 						//PostQuitMessage(0);  //May not be needed.
@@ -217,6 +217,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR args, int ncmdsho
 
 	HWND hWnd = CreateWindowW(L"myWindowClass", 0, WS_OVERLAPPEDWINDOW | WS_VISIBLE,
 		0, 0, cWidth, cHeight, NULL, NULL, NULL, NULL);
+
+	if (IsWindow(hWnd)) {
+		DWORD dwStyle = GetWindowLongPtr(hWnd, GWL_STYLE);
+		DWORD dwExStyle = GetWindowLongPtr(hWnd, GWL_EXSTYLE);
+		HMENU menu = GetMenu(hWnd);
+		RECT rc = { 0, 0, cWidth, cHeight };
+		AdjustWindowRectEx(&rc, dwStyle, menu ? TRUE : FALSE, dwExStyle);
+		SetWindowPos(hWnd, NULL, 0, 0, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOMOVE);
+	}
+
 
 	MSG msg = { 0 };
 	//while (GetMessage(&msg, NULL, NULL, NULL)) {

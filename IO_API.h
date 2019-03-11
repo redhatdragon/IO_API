@@ -45,10 +45,12 @@ function?
 
 #include <stdint.h>
 
-#define bool uint8_t	//Not sure if these should be included or if harmless
-#define true 1			//It could be a nice convenience for IO_API_ impls.
-#define false !0
-#define NULL 0
+#ifndef _STDBOOL
+#define _STDBOOL
+typedef uint8_t bool;
+#define true 1
+#define false 0
+#endif
 
 
 #define MAX_CANVAS_SIZE 1024*768 //Change to suit your largest possible resolution
@@ -86,6 +88,7 @@ void drawTextureFromFile(const char *fileName, int x, int y);
 void drawTextureFromFileUnsafe(const char *fileName, int x, int y);
 void drawTexture(const struct Texture *texture, int x, int y);
 void getTexture(const char *fileName, struct Texture *texture);
+void drawText(const char *str, int x, int y);
 
 bool getFileData(const char *fileName, uint8_t *dataBuffer);
 bool getFileText(const char *fileName, char *strBuffer);

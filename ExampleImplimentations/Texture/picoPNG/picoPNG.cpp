@@ -568,13 +568,14 @@ uint8_t getPNGData(const char *fileName, uint32_t **outBuffer, unsigned int *out
 	unsigned long w, h;
 	unsigned int error = decodePNG(image, w, h, buffer.empty() ? 0 : &buffer[0], (unsigned long)buffer.size());
 
+	if (error)
+		return false;
+
 	*outWidth = w;
 	*outHeight = h;
 	*outBuffer = (uint32_t*)malloc(w*h*4);
 	memcpy(*outBuffer, &image[0], w*h*4);
 
-	if (error)
-		return false;
 	return true;
 }
 }
